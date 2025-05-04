@@ -34,18 +34,15 @@ services:
     networks:
       - coolify
     healthcheck:
-      test: ["CMD-SHELL", "php -f /var/www/html/wp-includes/version.php || exit 1"]
+      test:
+        ["CMD-SHELL", "php -f /var/www/html/wp-includes/version.php || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
 
   # Nginx web server service.
   nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-      args:
-        NGINX_VERSION: ${NGINX_VERSION:-1.27-alpine}
+    image: nginx:${NGINX_VERSION:-1.27-alpine}
     container_name: wordpress_nginx_${COOLIFY_CONTAINER_NAME:-default}
     restart: unless-stopped
     volumes:
