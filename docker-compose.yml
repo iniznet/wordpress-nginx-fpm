@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        WORDPRESS_FPM_VERSION: ${WORDPRESS_FPM_VERSION:-6.5-fpm-alpine}
+        WORDPRESS_FPM_VERSION: ${WORDPRESS_FPM_VERSION:-6.8-fpm-alpine}
     container_name: wordpress_php_fpm_${COOLIFY_CONTAINER_NAME:-default}
     restart: unless-stopped
     environment:
