@@ -46,13 +46,7 @@ Generate unique values from `https://api.wordpress.org/secret-key/1.1/salt/` and
 *   `WORDPRESS_SITE_URL`: Public URL of your site. Can be set explicitly, or defaults to using the value of `$COOLIFY_URL` if available.
 *   `WORDPRESS_HOME`: Home URL, often the same as `WORDPRESS_SITE_URL`. Can be set explicitly, or defaults to using the value of `$COOLIFY_URL` if available.
 
-### Optional Nginx Configuration
-
-*   `NGINX_HOST_PORT`: Host port to map to Nginx container's port 80. Set this only if you need to force a specific host port different from Coolify's default (which might be set in `$PORT`). Defaults to `80` if `$PORT` is also unset.
-
 ## Coolify Predefined Variables
-
-Coolify automatically injects several predefined environment variables into your application's environment, such as `$COOLIFY_URL`, `$PORT`, and `$COOLIFY_RESOURCE_UUID` (used internally for unique container naming). You can reference these when setting other variables (e.g., `MY_VAR=$COOLIFY_URL`).
 
 For a full list and explanation, see the official Coolify documentation:
 [https://coolify.io/docs/knowledge-base/environment-variables](https://coolify.io/docs/knowledge-base/environment-variables)

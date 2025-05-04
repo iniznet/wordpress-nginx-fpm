@@ -52,8 +52,6 @@ services:
       - php-fpm
     networks:
       - coolify
-    ports:
-      - "${NGINX_HOST_PORT:-${PORT:-80}}:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
