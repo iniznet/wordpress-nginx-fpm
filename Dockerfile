@@ -22,8 +22,6 @@ RUN set -eux; \
     ;
 
 # Install PHP extensions.
-# IMPORTANT: Remove extensions you don't actually need (redis, memcached, imagick)
-# to save memory and reduce potential attack surface.
 RUN set -eux; \
     docker-php-ext-install \
         opcache \
@@ -59,7 +57,7 @@ RUN set -eux; \
 
 # Copy the custom FPM pool configuration.
 # This overwrites the default www.conf pool settings.
-COPY config/php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-optimized-pool.conf
+COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-optimized-pool.conf
 
 # Clean up build dependencies.
 RUN apk del .build-deps; \
