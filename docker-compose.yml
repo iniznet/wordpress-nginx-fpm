@@ -34,8 +34,7 @@ services:
     networks:
       - coolify
     healthcheck:
-      test:
-        ["CMD-SHELL", "php -f /var/www/html/wp-includes/version.php || exit 1"]
+      test: ["CMD", "php-fpm", "-t"]
       interval: 30s
       timeout: 5s
       retries: 3
