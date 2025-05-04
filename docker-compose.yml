@@ -6,7 +6,6 @@ services:
       dockerfile: Dockerfile
       args:
         WORDPRESS_FPM_VERSION: ${WORDPRESS_FPM_VERSION:-6.5-fpm-alpine}
-    # Use Coolify's unique resource ID for container naming.
     container_name: wordpress_php_fpm_${COOLIFY_CONTAINER_NAME:-default}
     restart: unless-stopped
     environment:
@@ -35,15 +34,14 @@ services:
     networks:
       - coolify
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1"]
-      interval: 2s
-      timeout: 10s
-      retries: 10
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   # Nginx web server service.
   nginx:
     image: nginx:${NGINX_VERSION:-1.27-alpine}
-    # Use Coolify's unique resource ID for container naming.
     container_name: wordpress_nginx_${COOLIFY_CONTAINER_NAME:-default}
     restart: unless-stopped
     volumes:
@@ -54,6 +52,13 @@ services:
       - php-fpm
     networks:
       - coolify
+    ports:
+      - "${NGINX_HOST_PORT:-${PORT:-80}}:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 volumes:
   wordpress_files:
@@ -61,4 +66,4 @@ volumes:
 
 networks:
   coolify:
-    external: true # Use Coolify's pre-defined network.
+    external: true
