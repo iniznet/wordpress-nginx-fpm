@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     volumes:
       - wordpress_files:/var/www/html:ro
-      - ./nginx:/etc/nginx/conf.d:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       # - nginx_logs:/var/log/nginx
     depends_on:
       php-fpm:
