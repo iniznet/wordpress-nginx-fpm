@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  # PHP-FPM service running WordPress.
+  php-fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        WORDPRESS_FPM_VERSION: ${WORDPRESS_FPM_VERSION:-6.5-fpm-alpine}
+    # Use Coolify's unique resource ID for container naming.
+    container_name: wordpress_php_fpm_${COOLIFY_CONTAINER_NAME:-default}
+    restart: unless-stopped
+    environment:
+      # Mandatory WordPress Database Connection (Set in Coolify).
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD} # Mark as secret.
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      # Mandatory WordPress Security Keys & Salts (Generate & Set in Coolify as secrets).
+      WORDPRESS_AUTH_KEY: ${WORDPRESS_AUTH_KEY}
+      WORDPRESS_SECURE_AUTH_KEY: ${WORDPRESS_SECURE_AUTH_KEY}
+      WORDPRESS_LOGGED_IN_KEY: ${WORDPRESS_LOGGED_IN_KEY}
+      WORDPRESS_NONCE_KEY: ${WORDPRESS_NONCE_KEY}
+      WORDPRESS_AUTH_SALT: ${WORDPRESS_AUTH_SALT}
+      WORDPRESS_SECURE_AUTH_SALT: ${WORDPRESS_SECURE_AUTH_SALT}
+      WORDPRESS_LOGGED_IN_SALT: ${WORDPRESS_LOGGED_IN_SALT}
+      WORDPRESS_NONCE_SALT: ${WORDPRESS_NONCE_SALT}
+      # Optional WordPress Configuration (Set in Coolify if needed).
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-0} # 1 for debug, 0 for production.
+      # Default SITE_URL/HOME to COOLIFY_URL if available, otherwise empty.
+      WORDPRESS_SITE_URL: ${WORDPRESS_SITE_URL:-${COOLIFY_URL:-}}
+      WORDPRESS_HOME: ${WORDPRESS_HOME:-${COOLIFY_URL:-}}
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - coolify
+
+  # Nginx web server service.
+  nginx:
+    image: nginx:${NGINX_VERSION:-1.27-alpine}
+    # Use Coolify's unique resource ID for container naming.
+    container_name: wordpress_nginx_${COOLIFY_CONTAINER_NAME:-default}
+    restart: unless-stopped
+    ports:
+      - "${NGINX_HOST_PORT:-${PORT:-80}}:80" # Use NGINX_HOST_PORT, fallback to PORT, fallback to 80
+    volumes:
+      - wordpress_files:/var/www/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # - nginx_logs:/var/log/nginx
+    depends_on:
+      - php-fpm
+    networks:
+      - coolify
+
+volumes:
+  wordpress_files:
+  # nginx_logs:
+
+networks:
+  coolify:
+    external: true # Use Coolify's pre-defined network.
