@@ -27,8 +27,8 @@ services:
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-0} # 1 for debug, 0 for production.
       # Default SITE_URL/HOME to COOLIFY_URL if available, otherwise empty.
-      WORDPRESS_SITE_URL: ${WORDPRESS_SITE_URL:-${COOLIFY_URL:-}}
-      WORDPRESS_HOME: ${WORDPRESS_HOME:-${COOLIFY_URL:-}}
+      WORDPRESS_SITE_URL: ${WORDPRESS_SITE_URL:-${COOLIFY_URL}}
+      WORDPRESS_HOME: ${WORDPRESS_HOME:-${COOLIFY_URL}}
     volumes:
       - wordpress_files:/var/www/html
     networks:
