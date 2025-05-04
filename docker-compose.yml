@@ -1,9 +1,8 @@
 services:
-  # PHP-FPM service running WordPress.
   php-fpm:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: wordpress.Dockerfile
       args:
         WORDPRESS_FPM_VERSION: ${WORDPRESS_FPM_VERSION:-6.8-fpm-alpine}
     container_name: wordpress_php_fpm_${COOLIFY_CONTAINER_NAME:-default}
@@ -39,7 +38,6 @@ services:
       timeout: 5s
       retries: 3
 
-  # Nginx web server service.
   nginx:
     build:
       context: .

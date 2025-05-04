@@ -4,7 +4,7 @@ This repository provides a Docker Compose setup for running WordPress with separ
 
 ## Usage
 
-To use this configuration, please **clone or fork** this repository. Do not use it directly if you intend to make customizations to the Dockerfile, Nginx configuration, or PHP extensions.
+To use this configuration, please **fork** this repository. Do not use it directly if you intend to make customizations to the Dockerfile, Nginx configuration, or PHP extensions.
 
 ## Disclaimer
 

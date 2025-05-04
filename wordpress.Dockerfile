@@ -57,7 +57,7 @@ RUN set -eux; \
 
 # Copy the custom FPM pool configuration.
 # This overwrites the default www.conf pool settings.
-COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-optimized-pool.conf
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-optimized-pool.conf
 
 # Clean up build dependencies.
 RUN apk del .build-deps; \
