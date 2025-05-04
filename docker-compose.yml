@@ -26,7 +26,7 @@ services:
       # Optional WordPress Configuration (Set in Coolify if needed).
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-0} # 1 for debug, 0 for production.
-      # Default SITE_URL/HOME to COOLIFY_URL if available, otherwise empty.
+      # Default SITE_URL/HOME to COOLIFY_URL
       WORDPRESS_SITE_URL: ${WORDPRESS_SITE_URL:-${COOLIFY_URL}}
       WORDPRESS_HOME: ${WORDPRESS_HOME:-${COOLIFY_URL}}
     volumes:
@@ -42,12 +42,15 @@ services:
 
   # Nginx web server service.
   nginx:
-    image: nginx:${NGINX_VERSION:-1.27-alpine}
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+      args:
+        NGINX_VERSION: ${NGINX_VERSION:-1.27-alpine}
     container_name: wordpress_nginx_${COOLIFY_CONTAINER_NAME:-default}
     restart: unless-stopped
     volumes:
       - wordpress_files:/var/www/html:ro
-      - ./default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       php-fpm:
         condition: service_healthy
