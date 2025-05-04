@@ -4,7 +4,6 @@ FROM wordpress:${WORDPRESS_FPM_VERSION}
 USER root
 
 # Install system dependencies required by PHP extensions.
-# Consider removing -dev packages for extensions you don't install below.
 RUN set -eux; \
     apk update; \
     apk add --no-cache --virtual .build-deps \
@@ -31,9 +30,10 @@ RUN set -eux; \
         zip \
     ; \
     pecl install redis; \
-    pecl install memcached; \
-    pecl install imagick; \
-    docker-php-ext-enable redis memcached imagick;
+    pecl install memcached;
+
+RUN set -eux; \
+    docker-php-ext-enable redis memcached;
 
 # Add common PHP runtime settings.
 RUN set -eux; \
@@ -50,7 +50,6 @@ RUN set -eux; \
     { \
         echo "; Optimized Opcache settings"; \
         echo "opcache.enable=1"; \
-        # Lowered memory consumption for 1-2GB RAM VPS.
         echo "opcache.memory_consumption=64"; \
         echo "opcache.interned_strings_buffer=8"; \
         echo "opcache.max_accelerated_files=4000"; \
